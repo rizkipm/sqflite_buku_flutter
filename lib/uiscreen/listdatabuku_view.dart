@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_buku_flutter/helper/db_helper.dart';
 import 'package:sqflite_buku_flutter/model/model_buku.dart';
+import 'package:sqflite_buku_flutter/uiscreen/addbuku_view.dart';
 
 class ListdatabukuView extends StatefulWidget {
   const ListdatabukuView({super.key});
@@ -45,6 +46,12 @@ class _ListdatabukuViewState extends State<ListdatabukuView> {
           );
         },
       ),
+      
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, (MaterialPageRoute(builder: (context) => const AddbukuView())));
+      },
+
+      child: Icon(Icons.add),),
     );
   }
 }
