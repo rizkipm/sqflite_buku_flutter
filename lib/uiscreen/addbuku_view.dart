@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite_buku_flutter/helper/db_helper.dart';
+import 'package:sqflite_buku_flutter/model/model_buku.dart';
 
 class AddbukuView extends StatefulWidget {
   const AddbukuView({super.key});
@@ -62,14 +64,31 @@ class _AddbukuViewState extends State<AddbukuView> {
                         backgroundColor: Colors.teal,
                         textStyle: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold)
                       ),
-                      onPressed: (){}, child: Text('Save Details')),
+                      onPressed: () async{
+                        setState(() {
+                          //validasi kosong atau tidak
+                          _judulBukuController.text.isEmpty ? _validateJudul = true : _validateJudul = false;
+                          _kategoriBukuController.text.isEmpty ? _validateKategori = true : _validateKategori = false;
+                        });
+                        if(_validateJudul == false && _validateKategori == false){
+                          //kita save data ke db
+                          var _buku = ModelBuku(judulbuku: _judulBukuController.text, kategori: _kategoriBukuController.text);
+                          var result = await DatabaseHelper.instance.insertBuku(_buku);
+                          //pindah page setelah berhasil insert
+                          Navigator.pop(context, result);
+                        }
+                      }, child: Text('Save Details')),
                   SizedBox(width: 10,),
                   TextButton(
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.red,
                           textStyle: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold)
                       ),
-                      onPressed: (){}, child: Text('Clear Details')),
+                      onPressed: (){
+                        //clear text
+                        _judulBukuController.text = '';
+                        _kategoriBukuController.text = '';
+                      }, child: Text('Clear Details')),
                 ],
               )
 
